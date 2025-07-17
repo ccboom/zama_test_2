@@ -1,0 +1,152 @@
+.rouletteWheel {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: conic-gradient(
+    /* 轮盘颜色配置，确保与numbers数组顺序一致 */
+    #0a0 0deg 9.73deg,
+    #a00 9.73deg 19.46deg,
+    #000 19.46deg 29.19deg,
+    /* 继续配置所有37个格子... */
+  );
+}
+
+.rouletteNumber {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform-origin: 50% 160px;
+  text-align: center;
+  width: 24px;
+  margin-left: -12px;
+  font-size: 14px;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 5px currentColor, 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.rouletteBall {
+  width: 18px;
+  height: 18px;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #eee 20%, #ccc 50%, #aaa 80%);
+  border-radius: 50%;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(0deg);
+  z-index: 20;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 2px 15px rgba(0, 0, 0, 0.6);
+  transform-origin: 50% 148px;
+  transition: transform 0.1s linear;
+   will-change: transform; /* 优化动画性能 */
+}
+
+.spinning {
+  animation: spin 0.25s linear infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes spin {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+
+.spinIndicator {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(45deg, #ffd700, #ffffff);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  z-index: 30;
+  filter: drop-shadow(0 0 8px gold);
+}
+
+@keyframes particle {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: gold;
+  border-radius: 50%;
+  animation: particle 1s ease-out forwards;
+  z-index: 15;
+}
+
+.resultPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 100;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  animation: popupFadeIn 0.3s ease-in-out;
+  display: none;
+}
+
+.resultPopup.show {
+  display: block;
+}
+
+.resultPopup h2 {
+  color: #ffd700;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.resultPopup p {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.resultPopup button {
+  background: #ffd700;
+  color: black;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.resultPopup button:hover {
+  background: #ffeb3b;
+}
+
+@keyframes popupFadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@keyframes smoothSpin {
+  0% {
+    transform: translateX(-50%) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.8, 1);
+  }
+  70% {
+    transform: translateX(-50%) rotate(calc(var(--final-angle) * 0.7));
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1);
+  }
+  90% {
+    transform: translateX(-50%) rotate(calc(var(--final-angle) * 0.9));
+    animation-timing-function: cubic-bezier(0.4, 0.4, 0.6, 1);
+  }
+  100% {
+    transform: translateX(-50%) rotate(var(--final-angle));
+  }
+}
